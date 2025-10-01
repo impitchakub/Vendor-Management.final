@@ -2,17 +2,17 @@
 #include<stdlib.h>
 #include<string.h>
 
-char SellerName[100];
-char ProductType[100];
+char SellerName[1000];
+char ProductType[1000];
 float Rating;
-char EvaluationDate[100];
+char EvaluationDate[1000];
 
       
 void Add_menu()
     {      
         
         printf("Seller Name : ");
-        scanf("%s",SellerName);//เก็บนามสกุลไม่ได้
+        scanf("%s",SellerName);
         printf("Product Type : ");
         scanf("%s",ProductType);
         printf("Rating : ");
@@ -20,24 +20,7 @@ void Add_menu()
         printf("Evaluation Date (YYYY-MM-DD) : ");
         scanf("%s",EvaluationDate);   
 
-    /*  printf("save or not (y,n)");
-        scanf("%s",collect);
-        //function save yes or no
-        if (collect== 'y')
-        {
-            Rating_table();
-        }
-        else
-        {
-
-        }
-        int Rating_table[15][4];
-    {
-        
-    }
-
-    }
-*/        
+      
 
         FILE*file=fopen("VendorManagement.csv","a");
         if (file == NULL)
@@ -45,94 +28,99 @@ void Add_menu()
                 printf("can't open file");   
                 
         }  
-        fprintf(file,"%s\n,%s\n,%.2f\n,%s\n" ,SellerName,ProductType,Rating,EvaluationDate);   
+        fprintf(file,"%s,%s,%.2f,%s\n" ,SellerName,ProductType,Rating,EvaluationDate);   
         fclose(file);
 
     }
 
 void Search_menu()
+{
     {
-        char SearchName[100];
-        printf("Please enter Seller name (John ) : ");
-        scanf("%s",SearchName);
+        char line[256];
+        char search[100];
+        int found = 0, count = 0;
+        FILE *file = fopen("VendorManagement.csv", "r");
+        printf("Search data: ");
+        scanf("%s", search);
 
-            FILE*file=fopen("VendorManagement.csv","r");
-            char line[256];
-            int find = 0;
-            const char delimiter[] = ",";
-            if (file == NULL)
+        while(fgets(line, sizeof(line), file) != NULL)
+        {
+                if(strstr(line, search))
             {
-                printf("can't open file");
-            }
-            while (fgets(line,sizeof(line),file))
-            {
-                char*token;
-                token=strtok(line,",");
-                while (token != NULL) 
+                    if(count < 1)
                 {
-                    printf("Seller Name: %s\n", token);
-                    token = strtok(NULL,",");
+                    printf("+----------+------------+-------------+----------------+\n");
+                    printf("| Name     | Product Type   | Rating | Evaluation date  |\n");
+                    printf("+----------+------------+-------------+----------------+\n");
                 }
-                char sName[100];
-                strcpy(sName,token);
-                if (strstr(sName,SellerName)!= NULL)
-                {
-                    printf("Seller: %s\nProduct Type: %s\nRating: %.2f\nDate: %s\n ",sName);
-                }
-                
-                
-            }
-    
-
-                /* 
-                
-                
-
-                int found = strcasecmp(SearchName,SellerName);
-                {
-                    if (found==0)
-                    {
-                        printf("%s",token);
-                    }
-                    else(found != 0);
-                    {
-                        printf("can't found");
-                    }
-                    
-                }*/
             
+            char *SellerName = strtok(line, ",");
+            char *ProductType = strtok(NULL, ",");
+            char *Rating = strtok(NULL, ",");
+            char *EvaluationDate = strtok(NULL, "\n");
+
+            printf("| %-8s | %-14s | %-6s | %-16s | %-3d |\n", SellerName, ProductType, Rating, EvaluationDate);
+            found = 1;   
+            printf("+----------+------------+-------------+----------------+\n");
+            }
+            count++;
+        }
+        if(found != 1) printf("Data is not found.\n");
+        fclose(file);
+    }
+
+}
 
             fclose(file);
 
-    }
+    
 
-   /* 
+  
 void Update_menu()
+{
+    int count = 0, i = 1;
+    char updateStatus;
+    FILE *file = fopen("VendorManagement.csv", "r");
+    int num;
+    char line[256];
+    printf("Update data");
+    while(fgets(line, sizeof(line), file) != NULL)
     {
-            char keyword[100];
-            printf("Enter Seller name to delete: ");
-            scanf(" %s", keyword);
-        {
-            FILE*file=fopen("ระบบจัดการข้อมูลการประเมินผู้ขาย.csv","r");
-            if (file == NULL)
-            {
-                printf("can't open file");
-            }   
+        if(count < 1){
+            printf("+----------+------------+-------------+----------------+\n");
+            printf("| Seller Name  | Product Type   | Rating | Evaluation date  |\n");
+            printf("+----------+------------+-------------+----------------+\n");
+        }
+            
+        char *SellerName = strtok(line, ",");
+        char *ProductType = strtok(NULL, ",");
+        char *Rating = strtok(NULL, ",");
+        char *EvaluationDate = strtok(NULL, "\n");
 
-                fclose(file);
-        }  
+        printf("| %-8s | %-14s | %-6s | %-16s | %-3d |\n", SellerName, ProductType, Rating, EvaluationDate, i);
+        printf("+----------+------------+-------------+----------------+\n");
+        count++;
+        i++;
     }
+}
+ /* 
 void Delete_menu()
-    {
+{
+        char line[256];
+        char delete[100];
+        int found = 0, count = 0;
+        FILE *file = fopen("VendorManagement.csv", "r");
+        FILE *temp = fopen("VendorManagement.csv", "w");
+        printf("Search data: ");
+        scanf("%s", search); 
+        FILE*file=fopen("ระบบจัดการข้อมูลการประเมินผู้ขาย.csv","r");
+        if (file == NULL)
         {
-            FILE*file=fopen("ระบบจัดการข้อมูลการประเมินผู้ขาย.csv","r");
-            if (file == NULL)
-            {
-                printf("can't open file");
-            }   
-                fclose(file);
-        }  
-    }
+            printf("can't open file");
+        }   
+            fclose(file);
+          
+}
 
     //unit test 2 function
     //endtoend
@@ -154,8 +142,8 @@ void menu()
             break;
             case 2:Search_menu();
             break;
-            // case 3:(Update_menu);
-            // break;
+            case 3:Update_menu();
+            break;
             //case 4:(Delete_menu);
             // break;
 
