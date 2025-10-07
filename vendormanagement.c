@@ -2,17 +2,17 @@
 #include<stdlib.h>
 #include<string.h>
 
-char SellerName[1000];
-char ProductType[1000];
+char SellerName[100];
+char ProductType[100];
 float Rating;
-char EvaluationDate[1000];
+char EvaluationDate[100];
 
       
 void Add_menu()
     {      
         
         printf("Seller Name : ");
-        scanf("%s",SellerName);
+        scanf(" %[^\n]",SellerName);
         printf("Product Type : ");
         scanf("%s",ProductType);
         printf("Rating : ");
