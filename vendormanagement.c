@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <assert.h>
 
 char SellerName[100];
 char ProductType[100];
@@ -75,33 +76,11 @@ void Search_menu()
 {
     char line[256];
     char search[100];
-    int found = 0;
+    int found = 0,index;
     FILE *file = fopen("VendorManagement.csv","r");
     if (file == NULL) return;
 
-    printf("+----+---------------+----------------+--------+----------------+\n");
-    printf("| #  | Seller Name   | Product Type   | Rating | EvaluationDate |\n");
-    printf("+----+---------------+----------------+--------+----------------+\n");
 
-    int index = 1;
-    while(fgets(line, sizeof(line), file) != NULL)
-    {
-        line[strcspn(line,"\n")] = 0;
-        char lineCopy[256];
-        strcpy(lineCopy, line);
-
-        char *SellerName = strtok(lineCopy, ",");
-        char *ProductType = strtok(NULL, ",");
-        char *Rating = strtok(NULL, ",");
-        char *EvaluationDate = strtok(NULL, "\n");
-
-        printf("| %-2d | %-13s | %-14s | %-6s | %-14s |\n", index, SellerName, ProductType, Rating, EvaluationDate);
-        index++;
-    }
-
-    printf("+----+---------------+----------------+--------+----------------+\n");
-
-    rewind(file);
     printf("Search by Name or Product Type: ");
     scanf(" %[^\n]", search);
 
@@ -331,8 +310,104 @@ void Delete_menu()
         }
     }
 }
+void Add_menu_input(const char *inSellerName, const char *inProductType, float inRating, const char *inEvaluationDate, int confirm, const char *filename) {
+    if (!confirm) return;
+
+    char SellerName[100];
+    char ProductType[100];
+    char EvaluationDate[100];
+    float Rating = inRating;
+
+    strncpy(SellerName, inSellerName, sizeof(SellerName)-1);
+    SellerName[sizeof(SellerName)-1] = '\0';
+
+    strncpy(ProductType, inProductType, sizeof(ProductType)-1);
+    ProductType[sizeof(ProductType)-1] = '\0';
+
+    strncpy(EvaluationDate, inEvaluationDate, sizeof(EvaluationDate)-1);
+    EvaluationDate[sizeof(EvaluationDate)-1] = '\0';
+
+    FILE *file = fopen(filename, "a");
+    if (!file) return;
+
+    fprintf(file, "%s,%s,%.2f,%s\n", SellerName, ProductType, Rating, EvaluationDate);
+    fclose(file);
+}
 
 
+void test_addData() 
+{
+    const char *file = "VendorManagement_test.csv";
+    remove(file);
+
+    Add_menu_input("BoundaryLow", "ProductA", 0.0, "2024-01-01", 1, file);
+    Add_menu_input("BoundaryHigh", "ProductB", 5.0, "2024-01-01", 1, file);
+
+    char longName[101];
+    memset(longName, 'A', 100);
+    longName[100] = '\0';
+    Add_menu_input(longName, "ProductC", 3.5, "2024-01-01", 1, file);
+
+    char extremeName[1005];
+    memset(extremeName, 'X', 1004);
+    extremeName[1004] = '\0';
+    Add_menu_input(extremeName, "ExtremeProduct", 4.2, "2024-01-01", 1, file);
+
+    FILE *f = fopen(file, "r");
+    char line[2000];
+    int count = 0;
+    while (fgets(line, sizeof(line), f)) {
+        count++;
+    }
+    fclose(f);
+}
+
+int UnitTest_addData()
+{
+    test_addData();
+    return 0;
+}
+
+int Search_menu_input(const char *search, const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (!file) return 0;
+    char line[2000];
+    int found = 0;
+    while (fgets(line, sizeof(line), file)) {
+        char copy[2000];
+        strcpy(copy, line);
+        char *SellerName = strtok(copy, ",");
+        char *ProductType = strtok(NULL, ",");
+        if ((SellerName && strstr(SellerName, search)) || (ProductType && strstr(ProductType, search))) {
+            found = 1;
+            break;
+        }
+    }
+    fclose(file);
+    return found;
+}
+
+void test_Search_menu() 
+{
+    const char *file = "VendorManagement_test.csv";
+    remove(file);
+
+    Add_menu_input("TestSeller", "TestProduct", 3.0, "2024-01-01", 1, file);
+
+    assert(Search_menu_input("TestSeller", file) == 1);
+    assert(Search_menu_input("NonExist", file) == 0);
+
+    remove(file);
+}
+int UnitTest_searchData()
+{
+    test_Search_menu();
+    return 0;
+}
+   
+
+
+    
     //unit test 2 function
     //endtoend
     
@@ -347,6 +422,9 @@ void Display_menu()
         printf("3. Update menu\n");
         printf("4. Delete menu\n");
         printf("5. Exit\n");
+        printf("6. testAdd\n");
+        printf("7. testDelete\n");
+        printf("8. EndtoEnd\n");
         printf("Please select the menu: ");
         scanf("%d",&select);
 
@@ -364,12 +442,17 @@ void Display_menu()
                 printf("Exiting program...\n");
                 break;
             default: printf("Invalid selection. Please try again.\n");
+            case 6: UnitTest_addData();
+            break;
+            case 7: UnitTest_searchData();
+            break;
         }
-    } while(select != 5);
+    } while(select != 8);
 }
 
 int main()
 {
+
     Display_menu();
     return 0;
 }
