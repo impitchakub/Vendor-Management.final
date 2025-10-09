@@ -1,5 +1,6 @@
 compile this in terminal
-gcc -c main.c
-gcc -c test.c
-gcc -o VendorManagement main.o test.o
+gcc -c vendormanagement.c
+gcc -c UnitTest_2.c
+gcc -c EndToEndtest.c
+gcc vendormanagement.c -o VendorManagement 
 
