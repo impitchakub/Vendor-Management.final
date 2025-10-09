@@ -1,0 +1,5 @@
+compile this in terminal
+gcc -c main.c
+gcc -c test.c
+gcc -o VendorManagement main.o test.o
+
