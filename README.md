@@ -26,6 +26,6 @@ compile this in terminal
 
   Execute the project : ./UnitTest_2
 
-- Compile unit test file : gcc EndToEndtest.c.c -o EndToEndtest
+- Compile unit test file : gcc EndToEndtest.c -o EndToEndtest
 
   Execute the project : ./EndToEndtest
