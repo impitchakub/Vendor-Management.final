@@ -312,7 +312,7 @@ void Delete_menu()
 }
 
 
-
+//Unit test Add menu
 void Add_menu_input(const char *SellerName, const char *ProductType, float Rating, const char *EvaluationDate, int confirm, const char *filename) {
     if (!confirm) return;
     FILE *file = fopen(filename, "a");
@@ -349,10 +349,13 @@ void test_addData()
 
     assert(count == 4);
     remove(file);
-    printf("UnitTest_addData passed\n");
+printf("\n**********************************************************************\n");
+printf("   ＼＼\\٩(๑`^´๑)۶//／／   UNIT TEST ADD  PASSED!!!   ＼＼\\٩(๑`^´๑)۶//／／ \n");
+printf("**********************************************************************\n");
+
 }
 
-
+//Unit test Search menu
 int Search_menu_input(const char *search, const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) return 0;
@@ -382,8 +385,14 @@ void test_Search_menu()
     assert(Search_menu_input("TestSeller", file) == 1);
     assert(Search_menu_input("NonExist", file) == 0);
     remove(file);
-    printf("UnitTest_searchData passed\n");
+printf("\n**********************************************************************\n");
+printf("   ＼＼\\٩(๑`^´๑)۶//／／   UNIT TEST SEARCH PASSED!!!   ＼＼\\٩(๑`^´๑)۶//／／ \n");
+printf("**********************************************************************\n");
+
+
 }
+
+//EndtoEnd test
 
     void Add_menu_file(const char *filename, const char *SellerName, const char *ProductType, float Rating, const char *EvaluationDate) {
     FILE *file = fopen(filename,"a");
@@ -470,7 +479,10 @@ void test_Add() {
     assert(Search_menu_file(filename,"Alice")==1);
     assert(Search_menu_file(filename,"Bob")==1);
 
-    printf("Unit Test Add Passed\n");
+printf("\n**********************************************************************\n");
+printf("   ＼＼\\٩(๑`^´๑)۶//／／   UNIT TEST ADD PASSED!!!   ＼＼\\٩(๑`^´๑)۶//／／ \n");
+printf("**********************************************************************\n");
+    
 }
 
 void test_Delete() {
@@ -497,7 +509,10 @@ void test_Update() {
     assert(Search_menu_file(filename,"Tablet")==1);
     assert(Search_menu_file(filename,"Phone")==0);
 
-    printf("Unit Test Update Passed\n");
+printf("\n**********************************************************************\n");
+printf("   ＼＼\\٩(๑`^´๑)۶//／／   UNIT TEST UPDATE PASSED!!!   ＼＼\\٩(๑`^´๑)۶//／／ \n");
+printf("**********************************************************************\n");
+
 }
 
 void test_Search() {
@@ -511,7 +526,10 @@ void test_Search() {
     assert(Search_menu_file(filename,"Laptop")==1);
     assert(Search_menu_file(filename,"NonExist")==0);
 
-    printf("Unit Test Search Passed\n");
+printf("\n**********************************************************************\n");
+printf("   ＼＼\\٩(๑`^´๑)۶//／／   UNIT TEST SEARCH PASSED!!!   ＼＼\\٩(๑`^´๑)۶//／／ \n");
+printf("**********************************************************************\n");
+    
 }
 
 void test_EndToEnd() {
@@ -529,8 +547,10 @@ void test_EndToEnd() {
 
     Delete_menu_file(filename,"Bob");
     assert(Search_menu_file(filename,"Bob")==0);
+printf("\n**********************************************************************\n");
+printf("   ＼＼\\٩(๑`^´๑)۶//／／   FULL END TO END TEST PASSED!!!   ＼＼\\٩(๑`^´๑)۶//／／ \n");
+printf("**********************************************************************\n");
 
-    printf("Full End-to-End System Test Passed!\n");
 }
 
 int EndtoEnd() 
@@ -542,12 +562,6 @@ int EndtoEnd()
     test_EndToEnd();
     return 0;
 }
-
-
-
-   
-    //unit test 2 function
-    //endtoend
     
 void Display_menu()
 {
